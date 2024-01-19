@@ -220,6 +220,8 @@ public:
                TDeskTop *(*cDeskTop )( TRect )
              ) noexcept;
 
+    TProgInit() : TProgInit(NULL, NULL, NULL) { }
+
 protected:
 
     TStatusLine *(*createStatusLine)( TRect );

@@ -1,6 +1,18 @@
 %module(directors=1) tvision
 
 %feature("autodoc", "3");
+%feature("director");
+
+%feature("director:except") {
+  if ($error != NULL) {
+    throw Swig::DirectorMethodException();
+  }
+}
+
+%exception {
+  try { $action }
+  catch (Swig::DirectorException &e) { SWIG_fail; }
+}
 
 %{
 #include "all_uses.hpp"
@@ -44,21 +56,24 @@
 // Utility functions are better implemented in Python so we import rather than include.
 %import "tvision/util.h"
 
-// TSpan and TStringView are unsafe to wrap in Python since they do not own what they point to.
 // %import "tvision/tspan.h"
-// %import "tvision/tstrview.h"
+
+%rename(TStringView_) TStringView;
+%include "tvision/tstrview.h"
 
 %ignore ::genRefs;
 
 // %include "tvision/colors.h"
 // %include "tvision/scrncell.h"
 // %include "tvision/hardware.h"
+
 %include "tvision/tkeys.h"
+
 // %include "tvision/ttext.h"
 // %include "tvision/tvobjs.h"
 // %import "tvision/tobjstrm.h"
 // %include "tvision/drawbuf.h"
-// %include "tvision/objects.h"
+%include "tvision/objects.h"
 
 %ignore TTimerQueue;
 %include "tvision/system.h"
@@ -69,9 +84,35 @@
 %ignore TView::getColor;
 %ignore TView::genRefs;
 %ignore TView::mapColor;
-%feature("director") TView;
 %feature("nodirector") TView::mapColor;
+%feature("nodirector") TWindow;
+
+// We will replace insertion methods in TGroup with variants which disown their inputs. This is
+// because, after insertion, TGroup will be responsible for delete-ing its children.
+%ignore TGroup::insert;
+%rename(insert) TGroup::insert_disowning;
+%ignore TGroup::insertBefore;
+%rename(insertBefore) TGroup::insertBefore_disowning;
+
 %include "tvision/views.h"
+
+%extend TGroup {
+  // Special typemap which disowns views passed to the methods we define below if the argument is
+  // named "view".
+  %typemap(in) TView* view {
+    if (!SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, SWIG_POINTER_DISOWN))) {
+      SWIG_exception_fail(SWIG_TypeError, "in method '$symname', expecting type TView");
+    }
+  }
+
+  void insert_disowning(TView *view) {
+    $self->insert(view);
+  }
+
+  void insertBefore_disowning(TView *p, TView *view) {
+    $self->insertBefore(p, view);
+  }
+}
 
 // %include "tvision/buffers.h"
 // %include "tvision/dialogs.h"
@@ -79,33 +120,39 @@
 // %include "tvision/stddlg.h"
 // %include "tvision/colorsel.h"
 
+%rename(TMenuItem_) TMenuItem;
+%rename(TMenu_) TMenu;
+%rename(TSubMenu_) TSubMenu;
+%rename(TMenuBar_) TMenuBar;
+%rename(sub_menu_append_item_) ::operator+(TSubMenu&, TMenuItem&);
 %include "tvision/menus.h"
+
+%extend TSubMenu {
+  TSubMenu(const char* nm, TKey key, ushort helpCtx = hcNoContext) {
+    return new TSubMenu(nm, key, helpCtx);
+  }
+  TSubMenu(const char* nm, ushort key, ushort helpCtx = hcNoContext) {
+    return new TSubMenu(nm, key, helpCtx);
+  }
+}
+
+%extend TMenuItem {
+  TMenuItem(const char* aName, ushort aCommand, TKey aKey, ushort aHelpCtx = hcNoContext) {
+    return new TMenuItem(aName, aCommand, aKey, aHelpCtx);
+  }
+  TMenuItem(const char* aName, ushort aCommand, ushort aKey, ushort aHelpCtx = hcNoContext) {
+    return new TMenuItem(aName, aCommand, aKey, aHelpCtx);
+  }
+}
+
+%pythoncode "menu.py"
 
 // %include "tvision/textview.h"
 // %include "tvision/editors.h"
 // %include "tvision/outline.h"
 // %include "tvision/surface.h"
 
-%rename(TApplicationBase) TApplication;
-%rename(TApplication) TPythonApplication;
+%feature("nodirector") TDeskTop;
+%rename(TApplication_) TApplication;
 %include "tvision/app.h"
-
-%inline %{
-class TPythonApplicationBase : public TApplication {
-public:
-  TPythonApplicationBase() : TProgInit(NULL, NULL, NULL) { }
-};
-%}
-
-%pythoncode %{
-class TApplication(TPythonApplicationBase):
-    def __init__(self):
-        super().__init__()
-        self.insertInitialWidgets()
-
-    def insertInitialWidgets(self):
-        r = self.getExtent()
-        self.insert(self.initDeskTop(r))
-        self.insert(self.initStatusLine(r))
-        self.insert(self.initMenuBar(r))
-%}
+%pythoncode "application.py"
