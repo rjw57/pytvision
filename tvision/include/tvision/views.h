@@ -957,6 +957,7 @@ class TWindowInit
 public:
 
     TWindowInit( TFrame *(*cFrame)( TRect ) ) noexcept;
+    TWindowInit() : TWindowInit(NULL) { }
 
 protected:
 

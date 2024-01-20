@@ -1,13 +1,15 @@
+// For write_args we need to avoid a reserved word.
+%rename(self_) write_args::self;
+
+%ignore TPalette::operator =;
+%ignore TPalette::operator [];
+
+// TODO:
 %ignore TView::getColor;
-%ignore TView::genRefs;
 %ignore TView::mapColor;
 
-%feature("director") TView;
-%feature("director") TFrame;
-%feature("director") TScrollBar;
-%feature("director") TScroller;
-%feature("director") TListViewer;
-%feature("director") TGroup;
+%ignore TView::read;
+%ignore TView::write;
 
 // TODO:
 %feature("nodirector") TView::mapColor;
@@ -20,7 +22,17 @@
 %ignore TGroup::insertBefore;
 %rename(insertBefore) TGroup::insertBefore_disowning;
 
+// TODO: unwrappable operators.
+%ignore TCommandSet;
+
+// TODO: returns pointers/referencees
+%ignore TView::getPalette;
+%ignore TWindow::title;
+%ignore TWindow::getTitle;
+
+%feature("director");
 %include "tvision/views.h"
+%feature("director", "");
 
 %extend TGroup {
   // Special typemap which disowns views passed to the methods we define below if the argument is

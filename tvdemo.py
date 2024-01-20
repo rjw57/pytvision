@@ -12,7 +12,23 @@ class HelpCtx(enum.IntEnum):
     ABOUT = 11
 
 
+class TestWindow(tv.TWindow):
+    def __init__(self):
+        super().__init__(tv.TRect(0, 0, 34, 12), "Test window", tv.wnNoNumber)
+        self.insert(tv.TStaticText(
+            tv.TRect(9, 2, 30, 9),
+            "\003Turbo Vision Demo\n\n"
+            "\003C++ Version\n\n"
+            "\003Copyright (c) 1994\n\n"
+            "\003Borland International",
+        ))
+
+
 class Application(tv.TApplication):
+    def __init__(self):
+        super().__init__()
+        self.deskTop.insert(TestWindow())
+
     def initMenuBar(self, r) -> tv.TMenuBar:
         r.b.y = r.a.y + 1
         return tv.TMenuBar(
@@ -78,7 +94,17 @@ class Application(tv.TApplication):
                 self.aboutDlgBox()
 
     def aboutDlgBox(self):
-        tv.messageBox("About dialog", tv.mfOKButton)
+        about_box = tv.TDialog(tv.TRect(0, 0, 39, 13), "About")
+        about_box.insert(tv.TStaticText(
+            tv.TRect(9, 2, 30, 9),
+            "\003Turbo Vision Demo\n\n"
+            "\003C++ Version\n\n"
+            "\003Copyright (c) 1994\n\n"
+            "\003Borland International",
+        ))
+        about_box.insert(tv.TButton(tv.TRect(14, 10, 26, 12), " OK", tv.cmOK, tv.bfDefault))
+        about_box.options |= tv.ofCentered
+        self.executeDialog(about_box)
 
 
 def main():

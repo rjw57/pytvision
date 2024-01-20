@@ -10,8 +10,10 @@ list(APPEND CMAKE_SWIG_FLAGS -py3 -dirvtable -O -builtin)
 set_property(SOURCE pytvision.i PROPERTY CPLUSPLUS ON)
 set_property(SOURCE pytvision.i PROPERTY DEPENDS
   application.i
+  dialogs.i
   menus.i
   system.i
+  typemaps.i
   views.i
 
   all_uses.hpp

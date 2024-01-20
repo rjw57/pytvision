@@ -10,20 +10,35 @@
 %rename(status_def_append_item_) ::operator+(TStatusDef&, TStatusItem&);
 %rename(status_def_chain_) ::operator+(TStatusDef&, TStatusDef&);
 
-%feature("director") TMenuBar;
-%feature("director") TStatusLine;
-
 %ignore newLine;
 
 // Bare const char*.
 %ignore TMenuItem::name;
 
-// Method which return pointers/references.
+// Methods which return pointers/references.
 %ignore TMenuBar::getPalette;
 %ignore TStatusLine::getPalette;
 %ignore TStatusLine::hint;
 
+// We need to bring our own TMenuItem interface to avoid a nested union.
+class TMenuItem
+{
+public:
+  TMenuItem(
+    TStringView aName,
+    ushort aCommand,
+    TKey aKey,
+    ushort aHelpCtx = hcNoContext,
+    TStringView p = NULL
+  ) noexcept;
+  ~TMenuItem();
+};
+
+#undef Uses_TMenuItem
+%feature("director");
 %include "tvision/menus.h"
+%feature("director", "");
+#define Uses_TMenuItem
 
 %newobject new_line_menu_item_;
 %inline { TMenuItem* new_line_menu_item_() { return &newLine(); } }

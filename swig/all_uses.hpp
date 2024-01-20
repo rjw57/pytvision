@@ -77,7 +77,7 @@
 #define Uses_TResourceCollection
 #define Uses_TResourceFile
 #define Uses_TResourceItem
-#define Uses_TScreen
+// #define Uses_TScreen
 #define Uses_TScreenCell
 #define Uses_TScrollBar
 #define Uses_TScroller
@@ -90,8 +90,8 @@
 #define Uses_TStatusItem
 #define Uses_TStatusLine
 #define Uses_TStreamable
-#define Uses_TStreamableClass
-#define Uses_TStreamableTypes
+// #define Uses_TStreamableClass
+// #define Uses_TStreamableTypes
 #define Uses_TStrIndexRec
 #define Uses_TStringCollection
 #define Uses_TStringList

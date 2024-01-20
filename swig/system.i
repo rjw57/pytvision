@@ -21,8 +21,6 @@ struct CharScanType
   uchar scanCode;
 };
 
-%rename(asTKey) KeyDownEvent::operator TKey();
-
 struct KeyDownEvent
 {
   ushort keyCode;
@@ -32,11 +30,14 @@ struct KeyDownEvent
   uchar textLength;
 
   TStringView getText() const;
-  operator TKey() const;
 
 private:
   KeyDownEvent();
 };
+
+%extend KeyDownEvent {
+  TKey asTKey() { return TKey(*$self); }
+}
 
 struct MessageEvent
 {
