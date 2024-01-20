@@ -63,6 +63,7 @@
 %include "tvision/tvobjs.h"
 %include "tvision/tobjstrm.h"
 
+// TODO: TColorAttr and TColorAttr
 // %include "tvision/drawbuf.h"
 
 %include "tvision/objects.h"
@@ -91,9 +92,21 @@
 
 %include "menus.i"
 
-// %include "tvision/textview.h"
-// %include "tvision/editors.h"
-// %include "tvision/outline.h"
-// %include "tvision/surface.h"
+%ignore TTextDevice;
+%include "tvision/textview.h"
+
+%ignore TEditor::clipboard;
+// TODO:
+%ignore TEditor::formatLine;
+%ignore TEditor::formatCell;
+%include "tvision/editors.h"
+
+%ignore TNode::text;
+// Looks like these are never defined?
+%ignore TOutlineViewer::build;
+%ignore TOutlineViewer::name;
+%include "tvision/outline.h"
+
+%include "tvision/surface.h"
 
 %include "application.i"
