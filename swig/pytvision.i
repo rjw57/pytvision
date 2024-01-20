@@ -1,7 +1,5 @@
 %module(directors=1) tvision
-
 %feature("autodoc", "3");
-%feature("director");
 
 %feature("director:except") {
   if ($error != NULL) {
@@ -31,8 +29,6 @@
 %ignore operator==;
 %ignore operator!=;
 
-%ignore TStringView::operator[];
-
 // Define away keywords not used by swig.
 #define _NEAR
 #define _FAR
@@ -45,6 +41,48 @@
 %rename(__rshift__) *::operator>>;
 %rename(__eq__) *::operator==;
 %rename(__ne__) *::operator!=;
+
+// Implicit str -> TStringView
+%typemap(typecheck, precedence=SWIG_TYPECHECK_UNISTRING) TStringView {
+  $1 = (($input == Py_None) || (PyUnicode_Check($input))) ? 1 : 0;
+}
+
+%typemap(in) TStringView {
+  if($input == Py_None) {
+    $1 = NULL;
+  } else if(PyUnicode_Check($input)) {
+    $1 = TStringView(PyUnicode_AsUTF8($input));
+    if(PyErr_Occurred()) {
+      SWIG_fail;
+    }
+  } else {
+    SWIG_exception_fail(SWIG_TypeError, "in method '$symname', expecting type str or None");
+  }
+}
+
+// Implicit int -> TKey
+%typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) TKey {
+  if(PyLong_Check($input)) {
+    $1 = 1;
+  } else {
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr($input, &vptr, $1_descriptor, 0);
+    $1 = SWIG_IsOK(res) ? 1 : 0;
+  }
+}
+
+%typemap(in) TKey {
+  if (!SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, 0))) {
+    if(PyLong_Check($input)) {
+      $1 = TKey((ushort)PyLong_AsLong($input));
+      if(PyErr_Occurred()) {
+        SWIG_fail;
+      }
+    } else {
+      SWIG_exception_fail(SWIG_TypeError, "in method '$symname', expecting type Foo");
+    }
+  }
+}
 
 // Make sure all the Uses_... macros are defined.
 %import "all_uses.hpp"
@@ -71,46 +109,17 @@
 // %include "tvision/tvobjs.h"
 // %import "tvision/tobjstrm.h"
 // %include "tvision/drawbuf.h"
+
 %include "tvision/objects.h"
 
-%ignore TTimerQueue;
-%include "tvision/system.h"
+%include "system.i"
 
-// %include "tvision/msgbox.h"
+%ignore MsgBoxText;
+%include "tvision/msgbox.h"
+
 // %include "tvision/resource.h"
 
-%ignore TView::getColor;
-%ignore TView::genRefs;
-%ignore TView::mapColor;
-%feature("nodirector") TView::mapColor;
-%feature("nodirector") TWindow;
-
-// We will replace insertion methods in TGroup with variants which disown their inputs. This is
-// because, after insertion, TGroup will be responsible for delete-ing its children.
-%ignore TGroup::insert;
-%rename(insert) TGroup::insert_disowning;
-%ignore TGroup::insertBefore;
-%rename(insertBefore) TGroup::insertBefore_disowning;
-
-%include "tvision/views.h"
-
-%extend TGroup {
-  // Special typemap which disowns views passed to the methods we define below if the argument is
-  // named "view".
-  %typemap(in) TView* view {
-    if (!SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, SWIG_POINTER_DISOWN))) {
-      SWIG_exception_fail(SWIG_TypeError, "in method '$symname', expecting type TView");
-    }
-  }
-
-  void insert_disowning(TView *view) {
-    $self->insert(view);
-  }
-
-  void insertBefore_disowning(TView *p, TView *view) {
-    $self->insertBefore(p, view);
-  }
-}
+%include "views.i"
 
 // %include "tvision/buffers.h"
 // %include "tvision/dialogs.h"

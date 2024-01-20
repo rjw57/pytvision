@@ -1,19 +1,18 @@
 class TApplication(TApplication_):
     def __init__(self):
         super().__init__()
-        r = self.getExtent()
 
-        deskTop = self.initDeskTop(r)
+        deskTop = self.initDeskTop(self.getExtent())
         if deskTop:
             self.insert(deskTop)
             self.deskTop = deskTop
 
-        statusLine = self.initStatusLine(r)
+        statusLine = self.initStatusLine(self.getExtent())
         if statusLine:
             self.insert(statusLine)
             self.statusLine = statusLine
 
-        menuBar = self.initMenuBar(r)
+        menuBar = self.initMenuBar(self.getExtent())
         if menuBar:
             self.insert(menuBar)
             self.menuBar = menuBar

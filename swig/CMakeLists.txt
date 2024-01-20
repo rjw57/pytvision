@@ -11,6 +11,8 @@ set_property(SOURCE pytvision.i PROPERTY CPLUSPLUS ON)
 set_property(SOURCE pytvision.i PROPERTY DEPENDS
   application.i
   menus.i
+  system.i
+  views.i
 
   all_uses.hpp
 

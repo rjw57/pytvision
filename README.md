@@ -3,7 +3,7 @@
 ## Building
 
 ```console
-$ cmake -B ./build .
+$ cmake -B ./build -DCMAKE_BUILD_TYPE=Release .
 $ cmake --build ./build --parallel
 $ PYTHONPATH=./build/swig python tvdemo.py
 ```

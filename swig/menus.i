@@ -2,30 +2,30 @@
 %rename(TMenu_) TMenu;
 %rename(TSubMenu_) TSubMenu;
 %rename(TMenuBar_) TMenuBar;
+%rename(TStatusItem_) TStatusItem;
+%rename(TStatusDef_) TStatusDef;
+%rename(TStatusLine_) TStatusLine;
 %rename(sub_menu_append_item_) ::operator+(TSubMenu&, TMenuItem&);
+%rename(sub_menu_chain_) ::operator+(TSubMenu&, TSubMenu&);
+%rename(status_def_append_item_) ::operator+(TStatusDef&, TStatusItem&);
+%rename(status_def_chain_) ::operator+(TStatusDef&, TStatusDef&);
+
+%feature("director") TMenuBar;
+%feature("director") TStatusLine;
+
 %ignore newLine;
+
+// Bare const char*.
+%ignore TMenuItem::name;
+
+// Method which return pointers/references.
+%ignore TMenuBar::getPalette;
+%ignore TStatusLine::getPalette;
+%ignore TStatusLine::hint;
 
 %include "tvision/menus.h"
 
 %newobject new_line_menu_item_;
 %inline { TMenuItem* new_line_menu_item_() { return &newLine(); } }
-
-%extend TSubMenu {
-  TSubMenu(const char* nm, TKey key, ushort helpCtx = hcNoContext) {
-    return new TSubMenu(nm, key, helpCtx);
-  }
-  TSubMenu(const char* nm, ushort key, ushort helpCtx = hcNoContext) {
-    return new TSubMenu(nm, key, helpCtx);
-  }
-}
-
-%extend TMenuItem {
-  TMenuItem(const char* aName, ushort aCommand, TKey aKey, ushort aHelpCtx = hcNoContext, const char* p = NULL) {
-    return new TMenuItem(aName, aCommand, aKey, aHelpCtx, p);
-  }
-  TMenuItem(const char* aName, ushort aCommand, ushort aKey, ushort aHelpCtx = hcNoContext, const char* p = NULL) {
-    return new TMenuItem(aName, aCommand, aKey, aHelpCtx, p);
-  }
-}
 
 %pythoncode "menu.py"

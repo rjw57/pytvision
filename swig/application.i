@@ -1,7 +1,9 @@
+%feature("director") TProgram;
+%feature("director") TApplication;
+%rename(TApplication_) TApplication;
+
 // TODO: handle TDeskInit
 %feature("nodirector") TDeskTop;
-
-%rename(TApplication_) TApplication;
 
 %include "tvision/app.h"
 
