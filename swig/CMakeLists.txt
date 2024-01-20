@@ -33,3 +33,22 @@ target_include_directories(
 target_link_libraries(pytvision
   PUBLIC tvision ${Python_LIBRARIES}
 )
+
+get_property(WRAPPER_PY_FILE
+  TARGET pytvision
+  PROPERTY SWIG_SUPPORT_FILES
+)
+
+install(
+  FILES ${WRAPPER_PY_FILE}
+  DESTINATION ${CMAKE_INSTALL_PREFIX}
+  COMPONENT pytvision
+)
+
+install(
+ TARGETS pytvision
+ COMPONENT pytvision
+ LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}
+ ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}
+ RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}
+)

@@ -1,3 +1,11 @@
+[build-system]
+requires = [
+  "wheel",
+  "setuptools",
+  "setuptools_scm[toml]",
+  "cmake_build_extension",
+]
+
 [tool.black]
 line-length = 99
 
