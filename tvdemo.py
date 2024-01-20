@@ -3,7 +3,7 @@ import tvision as tv
 
 
 class Application(tv.TApplication):
-    def initMenuBar(self, r):
+    def initMenuBar(self, r) -> tv.TMenuBar:
         r.b.y = r.a.y + 1
         return tv.TMenuBar(
             r,
@@ -12,12 +12,13 @@ class Application(tv.TApplication):
                 tv.kbAltH,
                 tv.hcNoContext,
                 [
-                    tv.TMenuItem("~W~orld", 100, tv.kbAltW),
-                    tv.TMenuItem("~O~ther", 101, tv.kbAltO),
+                    tv.TMenuItem("~W~orld", 100, tv.kbAltW, p="Alt-W"),
+                    tv.TMenuLine(),
+                    tv.TMenuItem("~O~ther", 101, tv.kbAltO, p="Alt-O"),
                     tv.TSubMenu(
                         "~S~ub",
                         items=[
-                            tv.TMenuItem("E~x~it", tv.cmQuit, tv.kbAltX),
+                            tv.TMenuItem("E~x~it", tv.cmQuit, tv.kbAltY, tv.hcNoContext, "Alt-X"),
                         ],
                     ),
                 ],

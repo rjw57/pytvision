@@ -19,13 +19,13 @@ class TApplication(TApplication_):
             self.menuBar = menuBar
 
     @staticmethod
-    def initDeskTop(r: "TRect"):
+    def initDeskTop(r: "TRect") -> "TDeskTop":
         return TApplication_.initDeskTop(r)
 
     @staticmethod
-    def initMenuBar(r: "TRect"):
+    def initMenuBar(r: "TRect") -> "TMenuBar":
         return TApplication_.initMenuBar(r)
 
     @staticmethod
-    def initStatusLine(r: "TRect"):
+    def initStatusLine(r: "TRect") -> "TStatusLine":
         return TApplication_.initStatusLine(r)

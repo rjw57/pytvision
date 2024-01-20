@@ -118,39 +118,11 @@
 // %include "tvision/stddlg.h"
 // %include "tvision/colorsel.h"
 
-%rename(TMenuItem_) TMenuItem;
-%rename(TMenu_) TMenu;
-%rename(TSubMenu_) TSubMenu;
-%rename(TMenuBar_) TMenuBar;
-%rename(sub_menu_append_item_) ::operator+(TSubMenu&, TMenuItem&);
-%include "tvision/menus.h"
-
-%extend TSubMenu {
-  TSubMenu(const char* nm, TKey key, ushort helpCtx = hcNoContext) {
-    return new TSubMenu(nm, key, helpCtx);
-  }
-  TSubMenu(const char* nm, ushort key, ushort helpCtx = hcNoContext) {
-    return new TSubMenu(nm, key, helpCtx);
-  }
-}
-
-%extend TMenuItem {
-  TMenuItem(const char* aName, ushort aCommand, TKey aKey, ushort aHelpCtx = hcNoContext) {
-    return new TMenuItem(aName, aCommand, aKey, aHelpCtx);
-  }
-  TMenuItem(const char* aName, ushort aCommand, ushort aKey, ushort aHelpCtx = hcNoContext) {
-    return new TMenuItem(aName, aCommand, aKey, aHelpCtx);
-  }
-}
-
-%pythoncode "menu.py"
+%include "menus.i"
 
 // %include "tvision/textview.h"
 // %include "tvision/editors.h"
 // %include "tvision/outline.h"
 // %include "tvision/surface.h"
 
-%feature("nodirector") TDeskTop;
-%rename(TApplication_) TApplication;
-%include "tvision/app.h"
-%pythoncode "application.py"
+%include "application.i"
