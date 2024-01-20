@@ -11,8 +11,8 @@ setuptools.setup(
             source_dir=str(Path(__file__).parent.absolute()),
             cmake_configure_options=[
                 # This option points CMake to the right Python interpreter, and helps the logic of
-                # FindPython3.cmake to find the active version
-                f"-DPython3_ROOT_DIR={Path(sys.prefix)}",
+                # FindPython.cmake to find the active version
+                f"-DPython_ROOT_DIR={sys.prefix}",
             ],
             cmake_component="pytvision",
         ),

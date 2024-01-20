@@ -2,7 +2,7 @@ cmake_policy(SET CMP0078 NEW)
 cmake_policy(SET CMP0086 NEW)
 
 find_package(SWIG 4.0 REQUIRED COMPONENTS python)
-find_package(Python 3.8 REQUIRED COMPONENTS Development)
+find_package(Python 3.6 REQUIRED COMPONENTS Development.Module)
 
 include(UseSWIG)
 
