@@ -5,6 +5,7 @@ import tvision as tv
 
 class Command(enum.IntEnum):
     ABOUT = 100
+    DIALOG = 101
 
 
 class HelpCtx(enum.IntEnum):
@@ -39,7 +40,7 @@ class Application(tv.TApplication):
                     0,
                     HelpCtx.SYSTEM,
                     [
-                        tv.TMenuItem("~A~bout", Command.ABOUT, tv.kbNoKey, HelpCtx.ABOUT),
+                        tv.TMenuItem("~A~bout", Command.ABOUT, tv.kbAltA, HelpCtx.ABOUT),
                     ],
                 ),
                 tv.TSubMenu(
@@ -47,6 +48,7 @@ class Application(tv.TApplication):
                     tv.kbAltH,
                     tv.hcNoContext,
                     [
+                        tv.TMenuItem("Show ~D~ialog", Command.DIALOG, tv.kbAltD, p="Alt-D"),
                         tv.TMenuItem("~W~orld", 200, tv.kbAltW, p="Alt-W"),
                         tv.TMenuLine(),
                         tv.TMenuItem("~O~ther", 201, tv.kbAltO, p="Alt-O"),
@@ -92,6 +94,12 @@ class Application(tv.TApplication):
         if event.what == tv.evCommand:
             if event.message.command == Command.ABOUT:
                 self.aboutDlgBox()
+            elif event.message.command == Command.DIALOG:
+                self.testDlgBox()
+
+    def testDlgBox(self):
+        dlg = tv.TFileDialog("*.*", "Open File", "~N~ame", tv.fdOpenButton, 1)
+        self.executeDialog(dlg)
 
     def aboutDlgBox(self):
         about_box = tv.TDialog(tv.TRect(0, 0, 39, 13), "About")
