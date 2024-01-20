@@ -57,9 +57,7 @@
 %import "tvision/util.h"
 
 // %import "tvision/tspan.h"
-
-%rename(TStringView_) TStringView;
-%include "tvision/tstrview.h"
+// %import "tvision/tstrview.h"
 
 %ignore ::genRefs;
 
