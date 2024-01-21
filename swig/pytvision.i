@@ -32,28 +32,32 @@
 
 // Ignore genRefs which is not used in Python.
 %ignore ::genRefs;
-%ignore *::genRefs;
 
 // Define away keywords not used by swig.
 #define _NEAR
 #define _FAR
 #define _Cdecl
 
+// Typemaps for converting arguments.
+%include "typemaps.i"
+
 // Make sure all the Uses_... macros are defined.
 %import "all_uses.hpp"
 %import "tvision/tv.h"
 
-// Typemaps for converting arguments.
-%include "typemaps.i"
-
 // Base types used by headers but not wrapped directly.
 %import "tvision/ttypes.h"
+
+// Re-define the TV_TRIVIALLY_ASSIGNABLE macro from ttypes.h since we don't expose the operators it
+// defines.
+#undef TV_TRIVIALLY_ASSIGNABLE
+#define TV_TRIVIALLY_ASSIGNABLE(Self)
 
 // Utility functions are better implemented in Python so we import rather than include.
 %import "tvision/util.h"
 
-// %include "tvision/colors.h"
-// %include "tvision/scrncell.h"
+%include "colors.i"
+%include "scrncell.i"
 
 %include "tvision/tkeys.h"
 
@@ -63,8 +67,7 @@
 %include "tvision/tvobjs.h"
 %include "tvision/tobjstrm.h"
 
-// TODO: TColorAttr and TColorAttr
-// %include "tvision/drawbuf.h"
+%include "tvision/drawbuf.h"
 
 %include "tvision/objects.h"
 

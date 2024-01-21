@@ -175,7 +175,9 @@ extern const uchar specialChars[];
 // new nor guard against self-assignment.
 #define TV_TRIVIALLY_ASSIGNABLE(Self) \
     void* operator new(size_t, void *p) noexcept { return p; } \
-    void operator delete(void *, void *) noexcept {}; \
+    void operator delete(void *, void *) noexcept {} \
+    void* operator new(size_t s) noexcept { return ::operator new(s); } \
+    void operator delete(void *p) noexcept { ::operator delete(p); } \
     template <class T> \
     Self& operator=(const T &t) { return *new (this) Self(t); }
 

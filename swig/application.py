@@ -1,5 +1,5 @@
 class TApplication(TApplication_):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         deskTop = self.initDeskTop(self.getExtent())
@@ -18,13 +18,13 @@ class TApplication(TApplication_):
             self.menuBar = menuBar
 
     @staticmethod
-    def initDeskTop(r: "TRect") -> "TDeskTop":
+    def initDeskTop(r: TRect) -> TDeskTop:
         return TApplication_.initDeskTop(r)
 
     @staticmethod
-    def initMenuBar(r: "TRect") -> "TMenuBar":
+    def initMenuBar(r: TRect) -> TMenuBar:
         return TApplication_.initMenuBar(r)
 
     @staticmethod
-    def initStatusLine(r: "TRect") -> "TStatusLine":
+    def initStatusLine(r: TRect) -> TStatusLine:
         return TApplication_.initStatusLine(r)

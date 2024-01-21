@@ -1,19 +1,16 @@
+%rename(TWindow_) TWindow;
+
 // For write_args we need to avoid a reserved word.
 %rename(self_) write_args::self;
 
 %ignore TPalette::operator =;
 %ignore TPalette::operator [];
 
-// TODO:
-%ignore TView::getColor;
-%ignore TView::mapColor;
-
 %ignore TView::read;
 %ignore TView::write;
 
 // TODO:
 %feature("nodirector") TView::mapColor;
-%feature("nodirector") TWindow;
 
 // We will replace insertion methods in TGroup with variants which disown their inputs. This is
 // because, after insertion, TGroup will be responsible for delete-ing its children.
@@ -51,3 +48,5 @@
     $self->insertBefore(p, view);
   }
 }
+
+%pythoncode "views.py"

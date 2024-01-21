@@ -9,17 +9,18 @@ include(UseSWIG)
 list(APPEND CMAKE_SWIG_FLAGS -py3 -dirvtable -O -builtin)
 set_property(SOURCE pytvision.i PROPERTY CPLUSPLUS ON)
 set_property(SOURCE pytvision.i PROPERTY DEPENDS
+  all_uses.hpp
   application.i
+  application.py
+  colors.i
   dialogs.i
+  menu.py
   menus.i
+  scrncell.i
   system.i
   typemaps.i
   views.i
-
-  all_uses.hpp
-
-  application.py
-  menu.py
+  views.py
 )
 swig_add_library(pytvision TYPE SHARED LANGUAGE python SOURCES pytvision.i)
 
