@@ -63,3 +63,14 @@
     Py_DECREF(item);
   }
 }
+
+// Special typemap which disowns passed objects both via thisown and __disown__() if the object is a
+// director.
+%typemap(in) void* DISOWN {
+  if (!SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, SWIG_POINTER_DISOWN))) {
+    SWIG_exception_fail(SWIG_TypeError, "in method '$symname', expecting type $n_type");
+  } else {
+    Swig::Director *d = SWIG_DIRECTOR_CAST($1);
+    if(d) { d->swig_disown(); }
+  }
+}

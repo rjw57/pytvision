@@ -1,21 +1,23 @@
 %module(directors=1) tvision
 %feature("autodoc", "3");
 
-%feature("director:except") {
-  if ($error != NULL) {
-    throw Swig::DirectorMethodException();
-  }
-}
-
-%exception {
-  try { $action }
-  catch (Swig::DirectorException &e) { SWIG_fail; }
-}
-
 %{
+// noexcept and SWIG directors don't play nice.
+#define noexcept
 #include "all_uses.hpp"
 #include "tvision/tv.h"
 %}
+
+// Defined in application.i
+%{
+static void bailFromRun();
+%}
+
+%feature("director:except") {
+  if ($error != NULL) {
+    bailFromRun();
+  }
+}
 
 // Ignore constants which clash with Python builtins.
 %ignore True;

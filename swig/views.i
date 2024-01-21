@@ -9,18 +9,15 @@
 %ignore TView::read;
 %ignore TView::write;
 
-// TODO:
-%feature("nodirector") TView::mapColor;
-
 // We will replace insertion methods in TGroup with variants which disown their inputs. This is
 // because, after insertion, TGroup will be responsible for delete-ing its children.
 %ignore TGroup::insert;
-%rename(insert) TGroup::insert_disowning;
 %ignore TGroup::insertBefore;
-%rename(insertBefore) TGroup::insertBefore_disowning;
+%ignore TGroup::insertView;
 
-// TODO: unwrappable operators.
-%ignore TCommandSet;
+// Ignore unwrappable operators
+%ignore operator & (const TCommandSet&, const TCommandSet&);
+%ignore operator | (const TCommandSet&, const TCommandSet&);
 
 // TODO: returns pointers/referencees
 %ignore TView::getPalette;
@@ -28,25 +25,30 @@
 %ignore TWindow::getTitle;
 
 %feature("director");
+
 %include "tvision/views.h"
-%feature("director", "");
+
+// "Unignore" TGroup methods which disown their input since we re-implement them below.
+%rename("%s") TGroup::insert;
+%rename("%s") TGroup::insertBefore;
+%rename("%s") TGroup::insertView;
 
 %extend TGroup {
-  // Special typemap which disowns views passed to the methods we define below if the argument is
-  // named "view".
-  %typemap(in) TView* view {
-    if (!SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, SWIG_POINTER_DISOWN))) {
-      SWIG_exception_fail(SWIG_TypeError, "in method '$symname', expecting type TView");
-    }
+  %apply void* DISOWN { TView* view };
+
+  void insertView(TView *view, TView* Target) {
+    $self->insertView(view, Target);
   }
 
-  void insert_disowning(TView *view) {
+  void insert(TView *view) {
     $self->insert(view);
   }
 
-  void insertBefore_disowning(TView *p, TView *view) {
-    $self->insertBefore(p, view);
+  void insertBefore(TView *view, TView *Target) {
+    $self->insertBefore(view, Target);
   }
 }
+
+%feature("director", "");
 
 %pythoncode "views.py"

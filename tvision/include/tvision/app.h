@@ -80,6 +80,7 @@ class TDeskInit
 public:
 
     TDeskInit( TBackground *(*cBackground)( TRect ) ) noexcept;
+    TDeskInit() : TDeskInit(NULL) { }
 
 protected:
 
