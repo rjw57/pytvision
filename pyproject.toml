@@ -11,3 +11,7 @@ line-length = 99
 
 [tool.isort]
 profile = "black"
+
+[tool.mypy]
+ignore_missing_imports = true
+disable_error_code = ["attr-defined","name-defined"]
