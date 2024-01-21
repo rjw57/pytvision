@@ -11,6 +11,7 @@ with open(__file__) as f:
 class Command(enum.IntEnum):
     NEW_WIN = 199
     FILE_OPEN = 200
+    NEW_DIALOG = 201
 
 
 class Interior(tv.TScroller):
@@ -121,6 +122,9 @@ class MyApp(tv.TApplication):
                     [
                         tv.TMenuItem("~N~ext", tv.cmNext, tv.kbF6, tv.hcNoContext, "F6"),
                         tv.TMenuItem("~Z~oom", tv.cmZoom, tv.kbF5, tv.hcNoContext, "F5"),
+                        tv.TMenuItem(
+                            "~D~ialog", Command.NEW_DIALOG, tv.kbF2, tv.hcNoContext, "F2"
+                        ),
                     ],
                 ),
             ],
@@ -132,6 +136,8 @@ class MyApp(tv.TApplication):
         if event.what == tv.evCommand:
             if event.message.command == Command.NEW_WIN:
                 self.my_new_window()
+            elif event.message.command == Command.NEW_DIALOG:
+                self.new_dialog()
             self.clearEvent(event)
 
     def my_new_window(self) -> None:
@@ -140,6 +146,25 @@ class MyApp(tv.TApplication):
         self._win_number += 1
         window = DemoWindow(r, "Demo Window", self._win_number)
         self.deskTop.insert(window)
+
+    def new_dialog(self) -> None:
+        pd = tv.TDialog(tv.TRect(20, 6, 60, 19), "Demo Dialog")
+        pd.insert(tv.TButton(tv.TRect(15, 10, 25, 12), "~O~K", tv.cmOK, tv.bfDefault))
+        pd.insert(tv.TButton(tv.TRect(28, 10, 38, 12), "~C~ancel", tv.cmCancel, tv.bfNormal))
+
+        b = tv.TCheckBoxes(tv.TRect(3, 3, 18, 6), ["~H~varti", "~T~ilset", "~J~arlsberg"])
+        pd.insert(b)
+        pd.insert(tv.TLabel(tv.TRect(2, 2, 10, 3), "Cheeses", b))
+
+        b = tv.TRadioButtons(tv.TRect(22, 3, 34, 6), ["~S~olid", "~R~unny", "~M~elted"])
+        pd.insert(b)
+        pd.insert(tv.TLabel(tv.TRect(21, 2, 33, 3), "Consistency", b))
+
+        b = tv.TInputLine(tv.TRect(3, 8, 37, 9), 128)
+        pd.insert(b)
+        pd.insert(tv.TLabel(tv.TRect(2, 7, 24, 8), "Delivery Instructions", b))
+
+        self.deskTop.execView(pd)
 
 
 def main():

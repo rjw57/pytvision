@@ -35,7 +35,31 @@
         SWIG_fail;
       }
     } else {
-      SWIG_exception_fail(SWIG_TypeError, "in method '$symname', expecting type Foo");
+      SWIG_exception_fail(SWIG_TypeError, "in method '$symname', expecting type '$1_type'");
     }
+  }
+}
+
+// String sequence -> TSItem
+%typemap(typecheck) TSItem *aStrings {
+  $1 = PySequence_Check($input) ? 1 : 0;
+}
+
+%typemap(in) TSItem *aStrings {
+  if (!PySequence_Check($input)) {
+    PyErr_SetString(PyExc_TypeError, "in method '$symname', expecting a sequence of strings");
+    SWIG_fail;
+  }
+
+  $1 = NULL;
+  for(Py_ssize_t i=PyObject_Length($input)-1; i >= 0; --i) {
+    PyObject* item = PySequence_GetItem($input, i);
+    if(!item || !PyUnicode_Check(item)) {
+      PyErr_SetString(PyExc_TypeError, "in method '$symname', expecting a sequence of strings");
+      Py_DECREF(item);
+      SWIG_fail;
+    }
+    $1 = new TSItem(PyUnicode_AsUTF8(item), $1);
+    Py_DECREF(item);
   }
 }
