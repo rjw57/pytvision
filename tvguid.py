@@ -169,7 +169,10 @@ class MyApp(tv.TApplication):
 
 def main():
     app = MyApp()
-    app.run()
+    try:
+        app.run()
+    finally:
+        app.shutDown()
 
 
 if __name__ == "__main__":
