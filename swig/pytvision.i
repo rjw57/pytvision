@@ -69,15 +69,27 @@ static void bailFromRun();
 // %include "tvision/ttext.h"
 
 %ignore fLink;
+%ignore TNSCollection;
+%ignore TNSSortedCollection;
 %include "tvision/tvobjs.h"
 
 // TStreamable is an abstract base class, it's not constructed directly.
 %nodefaultctor TStreamable;
 %nodefaultdtor TStreamable;
+%ignore TStreamableClass;
+%ignore pstream;
+%ignore ipstream;
+%ignore opstream;
+%ignore iopstream;
+%ignore ifpstream;
+%ignore ofpstream;
+%ignore fpstream;
 %include "tvision/tobjstrm.h"
 
 %include "tvision/drawbuf.h"
 
+%ignore TCollection;
+%ignore TSortedCollection;
 %include "tvision/objects.h"
 
 %include "system.i"
@@ -85,10 +97,12 @@ static void bailFromRun();
 %ignore MsgBoxText;
 %include "tvision/msgbox.h"
 
+// Python has its own resource management mechanisms.
 // %include "tvision/resource.h"
 
 %include "views.i"
 
+// We don't expose low-level video buffer functionality.
 // %import "tvision/buffers.h"
 
 %include "dialogs.i"
