@@ -70,6 +70,10 @@ static void bailFromRun();
 
 %ignore fLink;
 %include "tvision/tvobjs.h"
+
+// TStreamable is an abstract base class, it's not constructed directly.
+%nodefaultctor TStreamable;
+%nodefaultdtor TStreamable;
 %include "tvision/tobjstrm.h"
 
 %include "tvision/drawbuf.h"
