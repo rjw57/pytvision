@@ -32,7 +32,7 @@ target_include_directories(
   PUBLIC ${Python_INCLUDE_DIRS}
 )
 target_link_libraries(pytvision
-  PUBLIC tvision ${Python_LIBRARIES}
+  PUBLIC tvision Python::Module
 )
 
 get_property(WRAPPER_PY_FILE
