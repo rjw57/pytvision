@@ -14,6 +14,7 @@ set_property(SOURCE pytvision.i PROPERTY DEPENDS
   application.py
   colors.i
   dialogs.i
+  editors.i
   menu.py
   menus.i
   scrncell.i

@@ -32,6 +32,15 @@ public:
     TStringView p = NULL
   ) noexcept;
   ~TMenuItem();
+
+  void append( TMenuItem *aNext ) noexcept;
+
+  TMenuItem *next;
+  ushort command;
+  Boolean disabled;
+  TKey keyCode;
+  ushort helpCtx;
+  TMenu *subMenu;
 };
 
 #undef Uses_TMenuItem

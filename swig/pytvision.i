@@ -77,6 +77,7 @@ static void bailFromRun();
 %nodefaultctor TStreamable;
 %nodefaultdtor TStreamable;
 %ignore TStreamableClass;
+%ignore TPReadObjects;
 %ignore pstream;
 %ignore ipstream;
 %ignore opstream;
@@ -121,11 +122,7 @@ static void bailFromRun();
 %ignore TTextDevice;
 %include "tvision/textview.h"
 
-%ignore TEditor::clipboard;
-// TODO:
-%ignore TEditor::formatLine;
-%ignore TEditor::formatCell;
-%include "tvision/editors.h"
+%include "editors.i"
 
 %ignore TNode::text;
 // Looks like these are never defined?
