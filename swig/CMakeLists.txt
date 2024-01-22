@@ -22,7 +22,7 @@ set_property(SOURCE pytvision.i PROPERTY DEPENDS
   views.i
   views.py
 )
-swig_add_library(pytvision TYPE SHARED LANGUAGE python SOURCES pytvision.i)
+swig_add_library(pytvision TYPE MODULE LANGUAGE python SOURCES pytvision.i)
 
 set_property(TARGET pytvision PROPERTY SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE)
 tv_add_private_includes(pytvision)
