@@ -2,8 +2,11 @@
 %feature("autodoc", "3");
 
 %{
+#include <stdexcept>
+
 // noexcept and SWIG directors don't play nice.
 #define noexcept
+
 #include "all_uses.hpp"
 #include "tvision/tv.h"
 %}
