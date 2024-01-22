@@ -13,6 +13,11 @@
 
 %feature("director");
 
+%inline {
+// Command used to signal a Python exception happened.
+const ushort cmException = 50;
+}
+
 %{
 static PyObject* bailType = NULL;
 static PyObject* bailValue = NULL;
@@ -30,10 +35,10 @@ static void bailFromRun() {
   if(bailTraceback) { Py_DECREF(bailTraceback); }
   PyErr_Fetch(&bailType, &bailValue, &bailTraceback);
   PyErr_Clear();
-  TEvent event;
-  event.what = evCommand;
-  event.message.command = cmQuit;
-  TProgram::application->putEvent(event);
+
+  // endModal will signal that run should exit. The exception handler will then re-raise if bail...
+  // variables are non-NULL.
+  TProgram::application->endModal(cmException);
 }
 %}
 
