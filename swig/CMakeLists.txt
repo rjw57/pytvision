@@ -6,7 +6,7 @@ find_package(Python 3.6 REQUIRED COMPONENTS Development.Module)
 
 include(UseSWIG)
 
-list(APPEND CMAKE_SWIG_FLAGS -py3 -builtin)
+list(APPEND CMAKE_SWIG_FLAGS -dirvtable -builtin)
 set_property(SOURCE pytvision.i PROPERTY CPLUSPLUS ON)
 set_property(SOURCE pytvision.i PROPERTY DEPENDS
   all_uses.hpp
