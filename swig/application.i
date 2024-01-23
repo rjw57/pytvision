@@ -8,8 +8,12 @@
 %warnfilter(454) TProgram::menuBar;
 %warnfilter(454) TProgram::deskTop;
 
+// We will replace insertion methods in TProgram with variants which disown their inputs. This is
+// because, after these are called, TProgram will be responsible for delete-ing its children.
 %ignore TProgram::insertWindow;
+%ignore TProgram::executeDialog;
 %rename(insertWindow) TProgram::insertWindow_disowning;
+%rename(executeDialog) TProgram::executeDialog_disowning;
 
 %feature("director");
 
@@ -63,9 +67,14 @@ static void bailFromRun() {
 
 %extend TProgram {
   %apply void* DISOWN { TWindow* };
+  %apply void* DISOWN { TDialog* };
 
   virtual TWindow* insertWindow_disowning(TWindow* win) {
     return $self->insertWindow(win);
+  }
+
+  virtual ushort executeDialog_disowning(TDialog* pD, void* data = NULL) {
+    return $self->executeDialog(pD, data);
   }
 }
 
