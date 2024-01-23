@@ -16,8 +16,6 @@
 %ignore TMenuItem::name;
 
 // Methods which return pointers/references.
-%ignore TMenuBar::getPalette;
-%ignore TStatusLine::getPalette;
 %ignore TStatusLine::hint;
 
 // We need to bring our own TMenuItem interface to avoid a nested union.

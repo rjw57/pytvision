@@ -5,8 +5,8 @@
 // For write_args we need to avoid a reserved word.
 %rename(self_) write_args::self;
 
-%ignore TPalette::operator =;
-%ignore TPalette::operator [];
+%rename(assign) TPalette::operator=;
+%rename(at) TPalette::operator[];
 
 %ignore TView::read;
 %ignore TView::write;
@@ -25,8 +25,10 @@
 %ignore operator & (const TCommandSet&, const TCommandSet&);
 %ignore operator | (const TCommandSet&, const TCommandSet&);
 
+// Palettes are static.
+%warnfilter(473) TView::getPalette;
+
 // TODO: returns pointers/referencees
-%ignore TView::getPalette;
 %ignore TWindow::title;
 %ignore TWindow::getTitle;
 

@@ -12,9 +12,32 @@ class TDeskTop(TDeskTop_):
         return TDeskTop_.initBackground(r)
 
 
+def _bios_color_to_desired(color: int):
+    r, g, b = [
+        (0x00, 0x00, 0x00),
+        (0x00, 0x00, 0xAA),
+        (0x00, 0xAA, 0x00),
+        (0x00, 0xAA, 0xAA),
+        (0xAA, 0x00, 0x00),
+        (0xAA, 0x00, 0xAA),
+        (0xAA, 0x55, 0x00),
+        (0xAA, 0xAA, 0xAA),
+        (0x55, 0x55, 0x55),
+        (0x55, 0x55, 0xFF),
+        (0x55, 0xFF, 0x55),
+        (0x55, 0xFF, 0xFF),
+        (0xFF, 0x55, 0x55),
+        (0xFF, 0x55, 0xFF),
+        (0xFF, 0xFF, 0x55),
+        (0xFF, 0xFF, 0xFF),
+    ][color]
+    return TColorDesired(TColorRGB(r, g, b))
+
+
 class TApplication(TApplication_):
     def __init__(self) -> None:
         super().__init__()
+        self._reset_palette()
 
         deskTop = self.initDeskTop(self.getExtent())
         if deskTop:
@@ -42,3 +65,17 @@ class TApplication(TApplication_):
     @staticmethod
     def initStatusLine(r: TRect) -> TStatusLine:
         return TApplication_.initStatusLine(r)
+
+    def _reset_palette(self) -> None:
+        # Rather than relying on terminals to have the one true color palette, reset the palette to
+        # correspond to CGA bios colors.
+        palette = self.getPalette()
+        for pal_idx in range(len(cpAppColor)):
+            c = palette.at(pal_idx)
+            if c.isBIOS():
+                bios_c = c.asBIOS()
+                new_c = TColorAttr(
+                    _bios_color_to_desired(bios_c & 0xF),
+                    _bios_color_to_desired((bios_c >> 4) & 0xF),
+                )
+                c.assign(new_c)

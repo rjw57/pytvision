@@ -5,4 +5,16 @@
 %rename(asInt) TColorAttr::operator uchar;
 %rename(asInt) TAttrPair::operator ushort;
 
+%extend TColorAttr {
+  void assign(TColorAttr *a) { (*$self) = *a; }
+}
+
+%extend TColorDesired {
+  void assign(TColorAttr *a) { (*$self) = *a; }
+}
+
+%extend TAttrPair {
+  void assign(TColorAttr *a) { (*$self) = *a; }
+}
+
 %include "tvision/colors.h"

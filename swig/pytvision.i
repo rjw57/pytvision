@@ -1,5 +1,6 @@
 %module(directors=1) tvision
 %feature("autodoc", "3");
+%include "stdint.i"
 
 %{
 #include <stdexcept>
@@ -53,10 +54,10 @@ static void bailFromRun();
 // Base types used by headers but not wrapped directly.
 %import "tvision/ttypes.h"
 
-// Re-define the TV_TRIVIALLY_ASSIGNABLE macro from ttypes.h since we don't expose the operators it
-// defines.
-#undef TV_TRIVIALLY_ASSIGNABLE
-#define TV_TRIVIALLY_ASSIGNABLE(Self)
+// Ignore the placement new and assignment operators defined by TV_TRIVIALLY_ASSIGNABLE.
+%ignore *::operator new;
+%ignore *::operator delete;
+%ignore *::operator =;
 
 // Utility functions are better implemented in Python so we import rather than include.
 %import "tvision/util.h"
