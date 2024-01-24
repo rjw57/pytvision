@@ -2,6 +2,11 @@
 %feature("autodoc", "3");
 %include "stdint.i"
 
+%pythonbegin %{
+from dataclasses import dataclass, field
+from typing import Iterable, Optional, Sequence, Union
+%}
+
 %{
 #include <stdexcept>
 
