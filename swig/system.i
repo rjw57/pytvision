@@ -26,10 +26,7 @@ struct KeyDownEvent
   ushort keyCode;
   CharScanType charScan;
   ushort controlKeyState;
-  char text[4];               // NOT null-terminated.
-  uchar textLength;
 
-  TStringView getText() const;
 
 private:
   KeyDownEvent();
@@ -37,6 +34,12 @@ private:
 
 %extend KeyDownEvent {
   TKey asTKey() { return TKey(*$self); }
+
+  %typemap(out) const KeyDownEvent* {
+    $result = PyUnicode_FromStringAndSize($1->text, $1->textLength);
+  }
+
+  const KeyDownEvent* getText() { return $self; }
 }
 
 struct MessageEvent
