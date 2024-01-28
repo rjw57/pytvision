@@ -136,6 +136,8 @@ static void bailFromRun();
 %ignore TOutlineViewer::name;
 %include "tvision/outline.h"
 
+%feature("director");
 %include "tvision/surface.h"
+%feature("director", "");
 
 %include "application.i"
