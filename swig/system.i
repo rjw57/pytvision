@@ -62,6 +62,9 @@ struct TEvent
   MouseEventType mouse;
   KeyDownEvent keyDown;
   MessageEvent message;
+
+  static void waitForEvent(int timeoutMs) noexcept;
+  static void putNothing() noexcept;
 };
 
 #define Uses_TEvent
