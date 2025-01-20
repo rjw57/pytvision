@@ -1,5 +1,9 @@
 # Python bindings for tvision
 
+Experimental bindings for Python for the tvision TUI library.
+
+![](./img/tvdemo.png)
+
 ## Building
 
 ```console
